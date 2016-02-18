@@ -1,0 +1,78 @@
+Clase 2
+
+ruby gems:herramientas de gestion de librerias . Gemas: son librerias que son utiles para automatizar operaciones por ejemplo rails es una gema 
+
+que se hace en caso de tener problemas con las gemas desactualizadas? se utiliza rvm para que cada version de ruby tenga conjunto de gemas especificas 
+
+rvm list : dice todos los ruby que tiene instalado y aparece seleccionado el que esta usando 
+
+rvm use ruby-2.3.0 para seleccionar el que se quiere usar 
+
+rvm gemset list : muestra los distintos gemset list que muestra todos los gemset (conjunto de gemas)
+
+gem list : que muestra todas las gemas locales
+
+rvm gemset use "global" : para usar las gemas del global 
+
+rvm gemset create curso : para crear una gemset
+
+rvm gemset use curso : para usar 
+
+gema divise: es una gema que le agrega comportamiento a rails 
+
+buscar como hago para que en terminal me aparezca rvm promt y el branch de git 
+
+HERRAMIENTAS BASICAS RVM Y EL GEMSET QUE VOY A USAR 	
+
+rmv use : selecciono el gemset
+luego
+rvm gemset list
+luego gemset use "nombre del gmset"
+luego gem install rails para instalar 
+
+para crar un nuevo proyecto rails en blanco 
+posicionar en carpeta que quiero crear y poner RAILS NEW "nombre que le quiero poner"
+
+bandle install: la herramienta que gestiona las gemas que voy a utilizar 
+
+rails server : inicia el servidor. inicia el localhost 
+
+ruby implementa un patron mv crea una carpeta app
+con - controladores: recibe peticiones del navegador web/atraves de la rutas. el controlador interactua con los modelos y con las vistas para devolver alguna vista ya sea html o xml o json o lo que sea 
+	- modelos: que se comunican con la base de datos, todo lo que tenga una relacion con la base de datos 
+	-Vistas : son kas que devuelve un contenido al controlador que devuelve una peticion y lo muestra 
+
+si quiero hacer un hola mundo tengo que hacer una ruta que dice que controlador usar y ese controlador usa una vista para mostrar los datos en el navegador 
+
+las rutas estan gestionadas en rails en un  archivo que se llama "routes.rb" 
+
+siempre dejar abierta la pestaña del servidor que esla que inicializo el rails server
+
+abro otro terminal para generar un controlador. me paro sobre el archivo/holamundo y pongo rails generete controllers welcome index
+y se crea un controlador y un archivo html y ademas en routes.rb se crea una ruta 
+
+de ahi configuro el holamundo del html en views /vistas 
+
+---------------------------------------------------
+
+rails dice que crees un archivo que es una migrations que es una definicion de la tabla y tiene una deficinion de como tiene que ser las tablas que voy a usar y crea un archivo db/migrations/
+
+rake -T : muestra todas las tareas del proyecto 
+
+     |-----------------------Crear local host, welcome y scaffold--------------------------------------------|
+
+ 1- Creo un gemset con el comando 'rvm gemset create *nombre*'
+2- Uso el gemset con el comando 'rvm gemset use *nombredegemset*'
+3- gem install rails
+4 - rails new hola-mundo
+# despues de instalar todo con el buddle
+5 - ingreso al proyecto hola-mundo creado.
+6 - creo un documento .rails-version
+7 - creo documento .rails-gemset
+8 rails server (inicia el servidor)
+9 - Abro la carpeta controllers y configuro routes
+10 -
+11 <EN CONSOLA> rails generate controller welcome index
+12 - rails generate scaffold
+13 - rails generate scaffold User name:string last_name:string age:integer email:string notes:text
+14 - rake db:migrate
