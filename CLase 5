@@ -1,0 +1,26 @@
+CLase 5
+
+rake db:rollback corro devuelta
+
+t.select es para crear un 
+
+si quiero crear un ventana con opciones creo en el helper un metodo que devuelva un vector 
+
+para ordenar segun el orden que yo quiera en la pantalla con la lista 
+voy al index o al la lista :
+<th> <%= link_to "Nombre", user_path(order: 'name') %>
+luego vamos al controlador y en el index creamos un 
+if params [:order] =='name'
+	@user =User.order(:name)
+elsif params[:order] == 'last_name'
+	@user = User.order(:last_name)
+else 
+	@user = User.all
+end
+
+oooooooooo 
+if params [:order].present?
+	@user =User.order(params[:order])
+else
+	@user = User.all
+end

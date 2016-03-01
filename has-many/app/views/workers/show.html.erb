@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>First name:</b>
+  <%= @worker.first_name %>
+</p>
+ 
+<p>
+  <b>Assignments:</b>
+  <ul>
+    <% @worker.assignments.each do |a| %>
+      <li>
+      <%= a.project.name %>, assigned at <%= a.assigned_at %>
+      </li>
+    <% end %>
+  </ul>
+</p>
+
+<%= link_to 'Edit', edit_worker_path(@worker) %> |
+<%= link_to 'Back', workers_path %>

@@ -1,0 +1,40 @@
+Clase 4		
+
+Modelos
+en el modelo de datos se pueden correr distintas consultas en el model de datos por ej: 
+- .all: hace una consulta de todos los datos por ejemplo
+hay distintos metodos de busqueda por ejemplo .Where(condicion).
+por ejemplo .first
+
+en ruby se utiliza hash por ejemplo 
+ hash = {carlos: 'kozuszko', pedro = 'gonzalez'}
+ puts hash.size(para saber la cantidad de elementos)
+ puts hash['gonzalez']		
+
+por ejemplo existre otro tipo de hash:
+puts "hola"
+ distintos
+puts :hola
+
+opciones ={:class => 'encabezado', :id =>'header', :style =>'display: none;'}
+
+puts opciones.inspect
+
+metodos se definen con def end
+
+----------Expreciones regulares----------------
+
+va definida entre // por ejemplo:
+expresion = /[A-ZA-Z0-90-90-9]/
+
+--------Relaciones de DAtos----------------
+CReacion del POST 
+para crear una relacion creamos otro scaffol y ponemos al final user:references
+
+para mostrar cuantos post tiene agrego una columna de articulos 
+y luego <%=user.post.count%>
+
+TAREA: VEr un tipo de relacion que se llama has-and-belongs-to-many
+y otro modelo de relacion has_many :through
+que definan las relaciones
+hacer ejemplos 

@@ -33,7 +33,7 @@ luego gem install rails para instalar
 para crar un nuevo proyecto rails en blanco 
 posicionar en carpeta que quiero crear y poner RAILS NEW "nombre que le quiero poner"
 
-bandle install: la herramienta que gestiona las gemas que voy a utilizar 
+bundle install: la herramienta que gestiona las gemas que voy a utilizar 
 
 rails server : inicia el servidor. inicia el localhost 
 
