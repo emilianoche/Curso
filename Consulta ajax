@@ -1,0 +1,155 @@
+Consulta ajax
+
+En el último posteo, Ruby on Rails, parte 18: Javascript y CoffeeScript, vimos como incluir Javascript en nuestras aplicaciones RoR, así que podemos continuar por este camino para aumentar la potencialidad de Javascript en los últimos tiempos: Ajax.
+
+Si no sabés de qué se trata Ajax te cuento que se trata de una tecnología que permite que Javascript envíe datos al servidor y recupere información del mismo, pero sin recargar la página.
+
+Para este ejemplo crearemos un proyecto nuevo llamado: recursos_humanos. Así que vamos a abrir la consola y escribir:
+
+rails new recursos_humanos -d mysql
+
+Bien, ahora crearemos las tres bases de datos para nuestra aplicación, así que vamos a nuestra interfaz de MySQL y escribimos lo siguiente:
+
+CREATE DATABASE recursos_humanos_development;
+CREATE DATABASE recursos_humanos_test;
+CREATE DATABASE recursos_humanos_production;
+
+Bien, ahora sólo resta poner los datos necesarios para conectarse a dicha base de datos, así que vamos a config -> database.yml y ponemos el nombre de usuario, contraseña e IP. Si no te acordás como era: http://fernando-gaitan.com.ar/ruby-on-rails-parte-17-scaffolding/
+
+Bien, ahora vamos a utilizar un scaffolding para crear el proceso de CRUD de los empleados de una empresa.
+
+rails g scaffold Empleado nombre:string apellido:string legajo:integer
+
+Seguramente en la vida real un empleado tendría más datos como tipo y número de documento, pero eso no es lo que nos interesa en esta publicación.
+
+Ejecutamos la migración:
+
+rake db:migrate
+
+Y vamos a definir nuestra página principal, que en este caso será la acción de index de empleados. Así que vamos a config -> routes.rb abrimos el archivo, buscamos:
+
+# root :to => 'welcome#index'
+
+Y lo reemplazamos por:
+
+root :to => 'empleados#index'
+
+Luego volvemos al raíz de nuestro proyecto y entramos a public y eliminamos index.html.
+
+Bien, ahora ya tenemos todo listo para trabajar con los registros de empleados, sin embargo antes de seguir vamos a hacer una cosa, vamos a ponerle validaciones a nuestro modelo. Por empezar tanto el nombre, el apellido y el número de legajo debe ser datos obligatorios, además el legajo debe ser numérico y no debe repetirse nunca.
+
+Así que vamos a app -> models -> empleado.rb y agregamos a la clase las siguientes líneas:
+
+#Validaciones de nombre
+ validates :nombre, :presence => {:message => "Usted debe ingresar un nombre"}, length: {minimum: 2, maximum: 50, :message => "El nombre debe tener entre 2 y 50 caracteres"}
+ #Validaciones de apellido
+ validates :apellido, :presence => {:message => "Usted debe ingresar un apellido"}, length: {minimum: 2, maximum: 50, :message => "El apellido debe tener entre 2 y 50 caracteres"}
+ #Validaciones de legajo
+ validates :legajo, :presence => {:message => "Usted debe ingresar un legajo"}, :numericality => {:only_integer => true, :message => "El legajo debe ser numérica"}, :uniqueness => {:message => "Usted ha ingresado un legajo repetido"}
+
+La línea:
+
+uniqueness => {:message => "Usted ha ingresado un legajo repetido"}
+
+Es la que permite que no puedan ingresarse dos empleados con el mismo legajo.
+
+Bien, continuemos, ahora haremos lo siguiente, dentro de la vista ubicada en app -> views -> empleados -> index.html.erb vamos a agregar un pequeño formulario para que el usuario pueda buscar empleados por el legajo así que debajo de todo agregaremos esto:
+
+<hr />
+<%= form_tag do %>
+   <%= label_tag "legajo", "Buscar por legajo" %>
+   <%= text_field_tag "legajo", "" %>
+   <%= submit_tag "Buscar", {:type => "button", :id => "boton_buscar"} %>
+   <div id="respuesta"></div>
+<% end %>
+<%= javascript_include_tag "buscar_por_legajo" %>
+
+Ok, como ven en el ejemplo tenemos un formulario con un campo de ingreso y un botón, en el campo el usuario deberá ingresar el legajo del usuario y al pulsar el botón deberá buscarse un empleado con ese legajo. También incluimos un javascript que se encargará de enviar el ajax. Así que vamos a crear ese archivo.
+
+Primero vamos a app -> assets -> javascripts y dentro creamos un archivo llamado: buscar_por_legajo.js y dentro pegamos el siguiente código:
+
+function buscarPorLegajo(){
+   $("#boton_buscar").click(function(){
+     var legajo = $("#legajo").val();
+     $.ajax({
+        url: "/empleados/buscar_por_legajo/" + legajo,
+        dataType: "JSON",
+        timeout: 10000,
+        beforeSend: function(){
+           $("#respuesta").html("Cargando...");
+        },
+        error: function(){
+           $("#respuesta").html("Error al intentar buscar el empleado. Por favor intente más tarde.");
+        },
+        success: function(res){
+           if(res){
+              $("#respuesta").html('<a href="/empleados/'+res.id+'"> '+res.nombre+' ' + res.apellido + ' </a>');
+           }else{
+              $("#respuesta").html("El legajo no le pertenece a ningún empleado.");
+           }
+        }
+     })
+  });
+};
+$(document).ready(function(){
+   buscarPorLegajo();
+});
+
+No quise usar un archivo coffeeScript porque supuse que muchos de los que vieron el ejemplo anterior, Ruby on Rails, parte 18: Javascript y CoffeeScript, pudiesen no llegar a llevarse bien con el mismo, así que para hacer las cosas más fáciles seguimos con el viejo y amado javascript.
+
+También, siguiendo con lo que hicimos la última vez, vamos a ir a app -> assets -> javascripts -> application.js y eliminamos la línea:
+
+//= require_tree .
+
+Para evitar que nuestro archivo buscar_por_legajo.js se cargue dos veces.
+
+Ahora sólo nos resta hacer el trabajo del lado del servidor, así que vamos a nuestro controlador empleados y agregamos un nuevo método buscar_por_legajo:
+
+def buscar_por_legajo
+   empleado = Empleado.select("id, nombre, apellido").where(:legajo => params[:legajo]);
+   #Devuelve un json como salida al navegador.
+   render :json => empleado[0]
+end
+
+En primer lugar buscamos un empleado con el legajo que envió el usuario:
+
+empleado = Empleado.select("id, nombre, apellido").where(:legajo => params[:legajo]);
+
+Sin embargo, como vimos en otros posteos, RoR por defecto intentará devolver una respuesta con un html. Para evitar esto, nosotros le indicamos al método que lo que devolverá por pantalla será un json con la primer la posición cero que encontró la consulta:
+
+render :json => empleado[0];
+
+Esto le devolverá al navegador algo cómo esto:
+
+{"apellido":"Gaitán","id":1,"nombre":"Fernando"}
+
+Que luego Javascript convertirá a Json y todos felices :)
+
+Ahora sólo falta un paso que es agregar la acción que acabos de crear a nuestro archivo routes.rb. Así que vamos a config -> routes.rb. Ahí buscamos la línea:
+
+resources :empleados
+
+Y debajo escribimos:
+
+get "empleados/buscar_por_legajo"
+
+Esto permitirá acceder por medio del método GET a nuestra acción. Creo que ya deberíamos tenerlo cocinado esto, pero por las dudas.
+
+Luego buscamos dentro de ese mismo archivo:
+
+# match ':controller(/:action(/:id))(.:format)'
+
+Y debajo escribimos:
+
+match 'empleados/buscar_por_legajo/:legajo' => 'empleados#buscar_por_legajo'
+
+Donde es :legajo ahí se encontrará el número de legajo.
+
+Bueno, ahora ya tenemos nuestro ajax preparado para funcionar así que simplemente reiniciamos nuestro servidor con:
+
+rails s
+
+ 
+
+Saludos!
+

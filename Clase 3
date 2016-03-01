@@ -1,0 +1,18 @@
+Clase 3	
+el resources habilita las acciones para CRUD (create/read/update/Delete) == ABM
+
+funciones del CRUD ............ METODOS
+1 index.........................GET
+2 show..........................GET
+3 edit..........................GET
+4 new...........................GET
+5 update........................POST/PATCH
+6 create .......................POST
+7 destroy.......................DELETE
+
+<%=  %> es la forma html para utilizar rails
+
+----- 
+normalmente se usa en el link_to el _path
+pero se puede usar _url 
+-------------

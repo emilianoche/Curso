@@ -70,12 +70,6 @@ class EmpleadosController < ApplicationController
    # Never trust parameters from the scary internet, only allow the white list through.
     def empleado_params
      params.require(:empleado).permit(:nombre, :apellido, :legajo)
-    end
+    end 
 
-    def buscar_por_legajo
-   empleado = Empleado.select("id, nombre, apellido").where(:legajo => params[:legajo]);
-   #Devuelve un json como salida al navegador.
-   render :json => empleado[0]
-    end
-  
 end
