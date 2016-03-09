@@ -4,7 +4,6 @@
   <strong>First name:</strong>
   <%= @worker.first_name %>
 </p>
-<%= image_tag @worker.image.url(:medium) %>
 <p>
 <b>Associated projects:</b>
   <%= @worker.projects.map{|p| p.name}.to_sentence %>

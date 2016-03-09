@@ -83,6 +83,6 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def worker_params
-      params.require(:worker).permit(:first_name, project_ids: [], :image)
+      params.require(:worker).permit(:first_name, :image, :image_content_type, project_ids: [])
     end
 end

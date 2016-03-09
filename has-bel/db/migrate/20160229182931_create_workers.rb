@@ -4,7 +4,6 @@ class CreateWorkers < ActiveRecord::Migration
       t.string :first_name
 
       t.timestamps 
-    end
-    add_attachment :workers, :image
+   
   end
  end
