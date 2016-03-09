@@ -3,7 +3,8 @@ class CreateWorkers < ActiveRecord::Migration
     create_table :workers do |t|
       t.string :first_name
 
-      t.timestamps null: false
+      t.timestamps 
     end
+    add_attachment :workers, :image
   end
-end
+ end

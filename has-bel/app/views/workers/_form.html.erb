@@ -15,6 +15,10 @@
     <%= f.label :first_name %><br>
     <%= f.text_field :first_name %>
   </div>
+  <div class="field">
+  <%= f.label :image %>
+  <%= f.file_field :image %>
+</div>
    <div class="field">
     <%= label_tag 'projects' %><br />
     <% for project in Project.all do  %>
